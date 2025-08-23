@@ -4,10 +4,10 @@ Um aplicativo simples de **linha de comando** para organizar e marcar as rotinas
 
 ## ✨ Funcionalidades
 - Listagem de tarefas diárias;
-- Marcar tarefas concluídas com comandos simples (numéricos) com atualização em tempo real;
-- Sempre que abrir o programa no dia seguinte ele zera as tasks concluídas;
-- Controle de progresso do dia (Ex.: 3/6 concluídas);
-- Analisar sua consistência do dia em `progress.json`.
+- Marcarção e desmarcação de terefas do dia com atualização em tempo real;
+- Progresso salvo automaticamente;
+- **Reset diário automático**: as tarefas do dia anterior são zeradas automaticamente;
+- Visualização do progresso do dia (ex.: 3/6 concluídas).
 
 ## 🧰 Tecnologias
 - Python;
