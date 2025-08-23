@@ -12,7 +12,6 @@ def load_tasks():
 
 
 def load_progress():
-    # Se não existir progresso, cria novo
     if not os.path.exists(PROGRESS_FILE):
         return create_new_progress()
 
@@ -20,16 +19,12 @@ def load_progress():
         progress = json.load(f)
 
     today = datetime.today().strftime("%Y-%m-%d")
-
-    # Se a data mudou → resetar
     if progress.get("date") != today:
         return create_new_progress(today)
-
     return progress
 
 
 def create_new_progress(date=None):
-    """Cria progresso zerado para o dia atual"""
     tasks = load_tasks()
     today = date or datetime.today().strftime("%Y-%m-%d")
     progress = {
@@ -42,26 +37,40 @@ def create_new_progress(date=None):
 
 def save_progress(progress):
     with open(PROGRESS_FILE, "w", encoding="utf-8") as f:
-        json.dump(progress, f, indent=4)
+        json.dump(progress, f, indent=4, ensure_ascii=False)
 
 
 def show_routines(tasks, progress):
-    print("\n===== Daily Routine Tracker =====")
-    completed = 0
+    today_tasks = progress["tasks"]
+    completed = sum(1 for done in today_tasks.values() if done)
+    total = len(today_tasks)
+
+    print("\n" + "="*30)
+    print(f" GW2 Daily Routine — {progress['date']}")
+    print("="*30)
+
     for task in tasks:
-        status = "[x]" if progress["tasks"][str(task["id"])] else "[ ]"
-        if progress["tasks"][str(task["id"])]:
-            completed += 1
+        status = "[x]" if today_tasks[str(task["id"])] else "[ ]"
         print(f"{task['id']}. {status} {task['name']}")
-    print(f"\nProgresso: {completed}/{len(tasks)} concluídas\n")
+
+    print(f"\nProgresso do dia: {completed}/{total} concluídas")
+    print("="*30 + "\n")
 
 
-def toggle_task(progress, task_id):
+def toggle_task(progress, task_id, tasks):
     task_id = str(task_id)
-    if task_id in progress["tasks"]:
-        progress["tasks"][task_id] = not progress["tasks"][task_id]
+    today_tasks = progress["tasks"]
+
+    if task_id in today_tasks:
+        today_tasks[task_id] = not today_tasks[task_id]
         save_progress(progress)
-        print(f"Tarefa {task_id} atualizada!")
+
+        # Mensagem motivacional
+        task_name = next(task["name"] for task in tasks if str(task["id"]) == task_id)
+        if today_tasks[task_id]:
+            print(f"✔️  {task_name} concluída!")
+        else:
+            print(f"❌  {task_name} desmarcada!")
     else:
         print("ID inválido.")
 
@@ -72,14 +81,15 @@ def main():
 
     while True:
         show_routines(tasks, progress)
-        choice = input("Digite o ID da tarefa para marcar/desmarcar (ou 'q' para sair): ")
+        choice = input("Digite o ID da tarefa para marcar/desmarcar (ou 'q' para sair): ").strip()
 
         if choice.lower() == "q":
+            print("Até mais! Progresso do dia salvo.")
             break
         elif choice.isdigit():
-            toggle_task(progress, int(choice))
+            toggle_task(progress, int(choice), tasks)
         else:
-            print("Entrada inválida!")
+            print("Entrada inválida! Digite um número ou 'q' para sair.")
 
 
 if __name__ == "__main__":
