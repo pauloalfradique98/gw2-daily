@@ -13,6 +13,9 @@ Um aplicativo simples de **linha de comando** para organizar e marcar as rotinas
 - Python;
 - Arquivos JSON para persistência;
 
+## 💻 Funcionamento do CLI:
+<img src="exemplo.png" alt="Exemplo do CLI">
+
 ## ▶️ Como rodar
 ```bash
 python cli.py
