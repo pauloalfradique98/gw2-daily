@@ -1,62 +1,86 @@
 import json
 import os
+from datetime import datetime
 
-# Nome do arquivo onde vamos salvar o progresso
-SAVE_FILE = "progress.json"
+TASKS_FILE = "tasks.json"
+PROGRESS_FILE = "progress.json"
 
-# Rotinas que você definiu
-routines = [
-    "Login Reward",
-    "Craft Ectos",
-    "Farm Daily",
-    "Fractal Daily",
-    "Gathering Daily",
-    "Wizard Vault Daily"
-]
 
-# Função para carregar progresso salvo
+def load_tasks():
+    with open(TASKS_FILE, "r", encoding="utf-8") as f:
+        return json.load(f)
+
+
 def load_progress():
-    if os.path.exists(SAVE_FILE):
-        with open(SAVE_FILE, "r") as f:
-            return json.load(f)
-    else:
-        # Se não existir arquivo, começa tudo como não feito
-        return {routine: False for routine in routines}
+    # Se não existir progresso, cria novo
+    if not os.path.exists(PROGRESS_FILE):
+        return create_new_progress()
 
-# Função para salvar progresso
+    with open(PROGRESS_FILE, "r", encoding="utf-8") as f:
+        progress = json.load(f)
+
+    today = datetime.today().strftime("%Y-%m-%d")
+
+    # Se a data mudou → resetar
+    if progress.get("date") != today:
+        return create_new_progress(today)
+
+    return progress
+
+
+def create_new_progress(date=None):
+    """Cria progresso zerado para o dia atual"""
+    tasks = load_tasks()
+    today = date or datetime.today().strftime("%Y-%m-%d")
+    progress = {
+        "date": today,
+        "tasks": {str(task["id"]): False for task in tasks}
+    }
+    save_progress(progress)
+    return progress
+
+
 def save_progress(progress):
-    with open(SAVE_FILE, "w") as f:
+    with open(PROGRESS_FILE, "w", encoding="utf-8") as f:
         json.dump(progress, f, indent=4)
 
-# Inicializa progresso
-progress = load_progress()
 
-# Função para mostrar checklist
-def show_routines():
+def show_routines(tasks, progress):
     print("\n===== Daily Routine Tracker =====")
-    for i, routine in enumerate(routines, 1):
-        status = "[x]" if progress[routine] else "[ ]"
-        print(f"{i}. {status} {routine}")
-    print("0. Sair")
+    completed = 0
+    for task in tasks:
+        status = "[x]" if progress["tasks"][str(task["id"])] else "[ ]"
+        if progress["tasks"][str(task["id"])]:
+            completed += 1
+        print(f"{task['id']}. {status} {task['name']}")
+    print(f"\nProgresso: {completed}/{len(tasks)} concluídas\n")
 
-# Função principal
+
+def toggle_task(progress, task_id):
+    task_id = str(task_id)
+    if task_id in progress["tasks"]:
+        progress["tasks"][task_id] = not progress["tasks"][task_id]
+        save_progress(progress)
+        print(f"Tarefa {task_id} atualizada!")
+    else:
+        print("ID inválido.")
+
+
 def main():
+    tasks = load_tasks()
+    progress = load_progress()
+
     while True:
-        show_routines()
-        choice = input("\nEscolha uma rotina para alternar (0 para sair): ")
+        show_routines(tasks, progress)
+        choice = input("Digite o ID da tarefa para marcar/desmarcar (ou 'q' para sair): ")
 
-        if choice == "0":
-            print("Saindo... Progresso salvo!")
-            save_progress(progress)
+        if choice.lower() == "q":
             break
-
-        if choice.isdigit() and 1 <= int(choice) <= len(routines):
-            routine = routines[int(choice) - 1]
-            # Alterna True <-> False
-            progress[routine] = not progress[routine]
-            save_progress(progress)  # Salva automaticamente
+        elif choice.isdigit():
+            toggle_task(progress, int(choice))
         else:
-            print("Opção inválida, tente novamente.")
+            print("Entrada inválida!")
+
 
 if __name__ == "__main__":
     main()
