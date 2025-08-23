@@ -4,17 +4,12 @@ Um aplicativo simples de **linha de comando** para organizar e marcar as rotinas
 
 ## ✨ Funcionalidades
 - Listagem de tarefas diárias;
-- Marcar múltiplas tarefas de uma vez (ex.: `2,4,5`);
-- Resetar progresso do dia (`R`);
-- Gerar relatório (`G`) em `relatorio.txt`;
-- Persistência em `progress.json`;
+- Marcar tarefas concluídas com atualização em tempo real;
+- Salvar e analisar sua consistência em `progress.json`;
 
 ## 🧰 Tecnologias
 - Python;
-- Arquivos JSON para persistência;
-
-## 💻 Funcionamento do CLI:
-<img src="exemplo.png" alt="Exemplo do CLI">
+- Arquivos JSON para automações;
 
 ## ▶️ Como rodar
 ```bash
