@@ -1,8 +1,10 @@
-[
-  {"id": 1, "name": "Login Reward"},
-  {"id": 2, "name": "Craft Ectos"},
-  {"id": 3, "name": "Farm Daily"},
-  {"id": 4, "name": "Fractal Daily"},
-  {"id": 5, "name": "Gathering Daily"},
-  {"id": 6, "name": "Wizard Vault Daily"}
-]
+
+{
+  "1": "Login Reward", 
+  "2": "Craft Ectos",
+  "3": "Farm Daily",
+  "4": "Fractal Daily",
+  "5": "Gathering Daily",
+  "6": "Wizard Vault Daily"
+}
+
