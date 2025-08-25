@@ -3,23 +3,29 @@
 Um aplicativo simples de **linha de comando** para organizar e marcar as rotinas diárias do **Guild Wars 2**.
 
 ## ✨ Funcionalidades
-- Listagem de tarefas diárias;
-- Marcarção e desmarcação de terefas do dia com atualização em tempo real;
-- Progresso salvo automaticamente;
+- Lista de tarefas diárias com status ✅/❌;
+- Interface em linha de comando (CLI) clara e colorida
+- Salvamento automático do progresso em JSON
 - **Reset diário automático**: as tarefas do dia anterior são zeradas automaticamente;
 - Visualização do progresso do dia (ex.: 3/6 concluídas);
-- Mensagens motivacionais ao marcar/desmarcar tarefas:
-  - ✔️ Tarefa concluída!
-  - ❌ Tarefa desmarcada!
+- Estrutura modular para facilitar manutenção e evolução.
 
 ## 🧰 Tecnologias
 - Python;
-- Arquivos JSON para manipulações um pouco mais complexas;
+
+## ⚙️ Pré-requisitos
+- Python 3.8+ Instalado
+- Git (opcional, se for clonar o repositório)
 
 ## ▶️ Como rodar
-1. Certifique-se de ter Python3.11+ instalado.
+1. Clone este repositório ou baixe os arquivos.
+```bash
+git clone https://github.com/pauloalfradique98/gw2-daily.git
+cd gw2-daily
+```
 2. Rode o programa:
 ```bash
 python cli.py
 ```
-3. Digite o ID da tarefa para marcar/desmarcar, ou 'q' para sair e salvar.
+3. Use o número da tarefa para marcar/desmarcar; 
+4. Digite 'q' para salvar e sair.
